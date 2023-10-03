@@ -4,33 +4,27 @@ use IEEE.numeric_std.all;
 
 entity alu is
 port(
-	-- two input operands
+	
 	x, y : in std_logic_vector(31 downto 0);
-	
-	-- 0 = add , 1 = sub
 	add_sub : in std_logic ;
-	
-	-- 00 = AND, 01 = OR , 10 = XOR , 11 = NOR
 	logic_func : in std_logic_vector(1 downto 0 ) ;
-
-	-- 00 = lui, 01 = setless , 10 = arith , 11 = logic
 	func : in std_logic_vector(1 downto 0 ) ;
 
-	-- output	
+
 	output : out std_logic_vector(31 downto 0) ;
 	overflow : out std_logic ;
 	zero : out std_logic);
+
 end alu ;
 
 architecture arc of alu is
 	signal add_sub_out, logic_out : std_logic_vector(31 downto 0);
 begin
 
-	-- add/sub
 	add_subtract_process : process(x, y, add_sub)
 	begin
 		if (add_sub = '0') then
-			 add_sub_out <= std_logic_vector(signed(x) + signed(y));	
+			add_sub_out <= std_logic_vector(signed(x) + signed(y));	
 		else
 			add_sub_out <= std_logic_vector(signed(x) - signed(y));
 		end if;
@@ -68,14 +62,6 @@ begin
 		end if;
 	end process;
 
-	-- check overflow
-	-- Addition
-	-- (+x) + (+y) = -z
-	-- (-x) + (-y) = +z
-
-	-- Subtraction
-	-- (+x) - (-y) = -z
-	-- (-x) + (+y) = +z
 	check_over_flow_process : process(add_sub, add_sub_out)
 	begin
 		if (add_sub = '0') then
